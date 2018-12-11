@@ -1,0 +1,33 @@
+-Se crean 7 procesos :
+				C4    ------ C7
+		C1 -----
+				C5
+		
+			
+P------ C2 ------C6
+
+
+		C3 
+
+-En total hay 8 procesos, contando al inicial, luego en la ultima iteracion
+del bucle ( i == 2), hay 8 procesos corriendo simultaneamente.
+
+-Para que se de un proceso zombie, tiene que darse un hijo que haya acabado
+su ejecucion, pero sin embargo el padre no. Por la forma en la que está implementado, se puede dar que un hijo acabe antes, que su padre, ya que 
+no hemos regulado de qué manera tienen que ejecutarse los distintos procesos.
+
+-El comportamiento no varía al cambiar p_heap a una variable global, pues
+entre procesos no se comparten las variables
+
+-Si cada hijo abre su fichero la salida que se obtiene es :
+
+ 		Child. pid=11071 ppid=11068. i=2 a=6 b=6 *p=6
+	 Parent. pid=11068 ppid=11065. i=2 a=5 b=5 *p=5
+Parent. pid=11065 ppid=11064. i=2 a=4 b=4 *p=4
+
+Es decir, se guarda la informacion de C7-C4-C1 (siguiendo la nomenclatura del
+arbol de procesos usado en el primer apartado).
+
+-Para que un proceso acabe siendo hijo de Init, tiene que quedar "huerfano", es decir, que su proceso padre finalice antes y haga exit(), 
+sin embargo, los padres tiene llamada wait(), luego no se puede dar.
+

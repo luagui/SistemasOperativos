@@ -1,0 +1,3 @@
+-El primer codigo no funciona correctamente porque se puede acceder de manera simultanea a la región critica "total_sum", compartida entre ambos hilos.
+
+-El segundo código no obtiene nunca el resultado correcto, porque no hay un  sched_yield(); tras "total_sum = tmp", luego se ejecuta tambien "tmp=total_sum;", de estar forma no se espera a que el otro hilo guarde sus calculos previamente.

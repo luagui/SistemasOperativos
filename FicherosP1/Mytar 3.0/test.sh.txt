@@ -1,0 +1,56 @@
+#Comprobamos si existe el file mytar
+if [ !-e ./mytar ]; then
+	echo "No existe mytar en el directorio"
+	exit -1
+#Comprobamos si tiene permisos de ejecucion
+elif [ !-x ./mytar ]; then
+	echo "El mytar no es ejecutable"
+	exit -1
+fi
+
+#Comprobamos si existe el directorio temp, si es así, borramos su contenido recursivamente (-rf)
+if [ -d "temp" ]; then
+	rm -rf temp
+fi
+
+#Creamos el directorio temp, y nos movemos a él
+mkdir "temp" 
+cd temp
+
+touch file1.txt
+echo "Hello world!">file1.txt
+
+touch file2.txt 
+head -10/etc/passwd>file2.txt 
+
+touch file3.dat  
+#-c deja seleccionar numero de bytes
+head -c 1024/dev/urandom >file3.dat
+  
+./../mytar -c -f filetar.mtar file1.txt file2.txt file3.dat
+
+mkdir "out"
+cp ./filetar.mtar ./out/filetar.mtar
+cd out
+
+./../../mytar -x -f filetar.mtar
+
+if ! diff ../file1.txt file1.txt>/dev/null ; then
+  	echo "Error: No conincide file1 actual con el del directorio anterior"
+  	exit -1
+fi
+
+if ! diff ../file2.txt file2.txt>/dev/null ; then
+  	echo "Error: No conincide file2 actual con el del directorio anterior"
+  	exit -1
+fi
+
+if ! diff ../file3.dat file3.dat>/dev/null ; then
+  	echo "Error: No conincide file3 actual con el del directorio anterior"
+	exit -1
+fi
+
+echo "Correct"
+cd .. 
+cd ..
+exit 0
